@@ -1,0 +1,6 @@
+bin/
+obj/
+applications.json
+applications.json.tmp
+appsettings.Production.json
+.env
