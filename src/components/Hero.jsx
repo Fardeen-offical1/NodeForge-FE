@@ -1,7 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import NodeField from "./NodeField.jsx";
 
 export default function Hero() {
+  const navigate = useNavigate();
+
   return (
     <section id="top" className="hero">
       <div className="hero-field">
@@ -20,19 +23,12 @@ export default function Hero() {
           build it with us.
         </p>
         <div className="hero-actions">
-          <button
-            className="btn btn-primary"
-            onClick={() =>
-              document
-                .querySelector("#internships")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
-          >
+          <button className="btn btn-primary" onClick={() => navigate("/internships")}>
             Apply for Internship
           </button>
-          <a href="mailto:contact.nodeforge1@gmail.com" className="btn btn-ghost">
-            Get in touch
-          </a>
+          <button className="btn btn-ghost" onClick={() => navigate("/work")}>
+            See our work
+          </button>
         </div>
       </div>
 

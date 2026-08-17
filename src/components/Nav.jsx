@@ -1,14 +1,15 @@
 import React, { useState } from "react";
+import { NavLink, useNavigate } from "react-router-dom";
 import NodeMark from "./NodeMark.jsx";
 import { useTheme } from "../ThemeContext.jsx";
 
 const LINKS = [
-  ["About", "#about"],
-  ["Services", "#services"],
-  ["Work", "#work"],
-  ["Process", "#process"],
-  ["Internships", "#internships"],
-  ["Contact", "#contact"],
+  ["About", "/about"],
+  ["Services", "/services"],
+  ["Work", "/work"],
+  ["Process", "/process"],
+  ["Internships", "/internships"],
+  ["Contact", "/contact"],
 ];
 
 function SunIcon() {
@@ -45,39 +46,30 @@ function MoonIcon() {
 export default function Nav() {
   const [open, setOpen] = useState(false);
   const { theme, toggle } = useTheme();
+  const navigate = useNavigate();
 
-  const go = (href) => {
+  const goInternships = () => {
     setOpen(false);
-    document.querySelector(href)?.scrollIntoView({ behavior: "smooth" });
+    navigate("/internships");
   };
 
   return (
     <header className="nav">
       <div className="container nav-inner">
-        <a
-          href="#top"
-          className="brand"
-          onClick={(e) => {
-            e.preventDefault();
-            go("#top");
-          }}
-        >
+        <NavLink to="/" className="brand" onClick={() => setOpen(false)}>
           <NodeMark size={30} />
           <span>NODEFORGE</span>
-        </a>
+        </NavLink>
 
         <nav className="links-desktop">
-          {LINKS.map(([label, href]) => (
-            <a
-              key={href}
-              href={href}
-              onClick={(e) => {
-                e.preventDefault();
-                go(href);
-              }}
+          {LINKS.map(([label, to]) => (
+            <NavLink
+              key={to}
+              to={to}
+              className={({ isActive }) => (isActive ? "active" : "")}
             >
               {label}
-            </a>
+            </NavLink>
           ))}
         </nav>
 
@@ -93,7 +85,7 @@ export default function Nav() {
 
           <button
             className="btn btn-primary btn-sm hide-mobile"
-            onClick={() => go("#internships")}
+            onClick={goInternships}
           >
             Apply for Internship
           </button>
@@ -112,22 +104,20 @@ export default function Nav() {
 
       {open && (
         <div className="mobile-menu">
-          {LINKS.map(([label, href]) => (
-            <a
-              key={href}
-              href={href}
-              onClick={(e) => {
-                e.preventDefault();
-                go(href);
-              }}
+          {LINKS.map(([label, to]) => (
+            <NavLink
+              key={to}
+              to={to}
+              onClick={() => setOpen(false)}
+              className={({ isActive }) => (isActive ? "active" : "")}
             >
               {label}
-            </a>
+            </NavLink>
           ))}
           <button
             className="btn btn-primary"
             style={{ marginTop: 8 }}
-            onClick={() => go("#internships")}
+            onClick={goInternships}
           >
             Apply for Internship
           </button>
@@ -169,13 +159,25 @@ export default function Nav() {
           justify-content: center;
         }
         .links-desktop a {
+          position: relative;
           color: var(--text-muted);
           text-decoration: none;
           font-size: 14.5px;
           font-weight: 500;
           transition: color 0.15s ease;
+          padding: 4px 0;
         }
         .links-desktop a:hover { color: var(--text); }
+        .links-desktop a.active { color: var(--text); }
+        .links-desktop a.active::after {
+          content: "";
+          position: absolute;
+          left: 0;
+          right: 0;
+          bottom: -25px;
+          height: 2px;
+          background: var(--ember);
+        }
 
         .nav-right {
           display: flex;
@@ -230,6 +232,7 @@ export default function Nav() {
             padding: 10px 0;
             font-size: 15px;
           }
+          .mobile-menu a.active { color: var(--ember); }
         }
       `}</style>
     </header>
